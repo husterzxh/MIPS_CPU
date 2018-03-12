@@ -7,8 +7,8 @@ module sel_bits_2_mux
 )
 (
 	input [DATA_BITS-1:0] d0, d1, d2, d3,
-	input [SEL_BITS-1] sel,
-	output [DATA_BITS-1:0] out
+	input [SEL_BITS-1:0] sel,
+	output reg [DATA_BITS-1:0] out
 );
 
 parameter SEL_BITS = 2;
@@ -19,7 +19,6 @@ always @ (*) begin
 	2'b01: out = d1;
 	2'b10: out = d2;
 	2'b11: out = d3;
-	default: out = (DATA_BITS)'bx;
 	endcase
 end
 
