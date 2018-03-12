@@ -1,16 +1,16 @@
 `timescale 1ns / 1ps
 
-// 
-module SEL_BITS_1_MUX
-#(	// DATA_BITS为输入的位宽
+// 二路选择器
+module sel_bits_1_mux
+#(	// DATA_BITS为输入的位宽 缺省值为2
 	parameter DATA_BITS = 2
-	parameter SEL_BITS = 2
 )
 (
-	input [DATA_BITS-1:0] d0, d1,
-	input [SEL_BITS-1:0] sel,
-	output [DATA_BITS-1:0] out
+	input wire [DATA_BITS-1:0] d0, d1,
+	input wire sel,
+	output wire [DATA_BITS-1:0] out
 );
 
+assign out = sel? d1: d0;
 
-assign  = ;
+endmodule
