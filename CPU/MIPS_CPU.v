@@ -6,16 +6,16 @@ module mips_cpu(
 	input [3:0] ShiftB,		//内存地址按钮
 	input rst, //reset信号
 	input change_hz, //频率切换按钮
-	output [7:0] an;	 //an控制八个数码管的亮灭
+	output [7:0] an,	 //an控制八个数码管的亮灭
 	output CA, CB, CC, CD, CE, CF, CG, DP,
-	output [3:0] dmaddr_light, //内存地址选择指示灯
+	output [3:0] dmaddr_light //内存地址选择指示灯
 	);
 	wire [31:0] divclk;		//分频
-	reg [31:0] nextpc;		//下一个PC值
-	reg clk_run;
+	wire [31:0] nextpc;		//下一个PC值
+	wire clk_run;
 	
 	//IM参数
-	reg [31:0] pc;			//当前PC值
+	wire [31:0] pc;			//当前PC值
 	wire [31:0] im_now;		//当前指令
 	//NPC参数
 	wire [15:0] uncon;
@@ -62,11 +62,11 @@ module mips_cpu(
 	wire Equal; 
 
 	//DM参数
-	wire [11:0] addr,
-	wire [31:0] din,
-	wire WE,
-	wire [1:0] mode,
-	wire [31:0] dataout
+	wire [11:0] addr;
+	wire [31:0] din;
+	wire WE;
+	wire [1:0] mode;
+	wire [31:0] dataout;
 
 	//立即数扩展
 	wire [31:0] ext_32;
@@ -77,7 +77,7 @@ module mips_cpu(
 
 	//显示模块
 	wire [31:0] DataMemory;
-	reg  clk_show;
+	wire  clk_show;
 
 	assign Imm16 = {func, Imm6_10, Imm11_15};
 	assign Imm5 = Imm6_10;
@@ -134,25 +134,14 @@ module mips_cpu(
 	assign we = sw;
 	assign mode[0] = (~lw) & (~sw);
 	assign mode[1] = 0;
-	DataMemo dm(.addr(addr), .din(din), .WE(we), .clk(clk_run), .mode(mode), .DataOut(dataout));
+	DataMemo dm(.addr(addr), .Din(din), .WE(we), .clk(clk_run), .mode(mode), .DataOut(dataout));
 
 	//显示模块
-	DataMemo rm(.addr({6'b0, ShiftB, 2'b0}), .din(0), .WE(0), .clk(clk_run), .mode(2'b0), .DataOut(DataMemory));
+	DataMemo rm(.addr({6'b0, ShiftB, 2'b0}), .Din(0), .WE(0), .clk(clk_run), .mode(2'b0), .DataOut(DataMemory));
 	show_signal my_show(.clk(clk_show), .ShiftA(ShiftA), .ShiftB(ShiftB), .total_cycle(0), .unconditional(uncon), .conditional(con), .conditionalsucces(consuccess),
 		.SyscallOut(0), .DataMemory(DataMemory), .PC(pc), .AN(an), .CA(CA), .CB(CB), .CC(CC), .CD(CD), .CE(CE), .CF(CF), .CG(CG), .DP(DP));
 
-	
-
-	initial begin
-		if(change_hz)
-			clk_run = divclk[0];
-		else
-			clk_run = divclk[20];
-	end
-
-	initial begin
-		clk_show = divclk[15];
-	end
-
+	assign clk_run = (change_hz)? divclk[0] : divclk[20];
+	assign clk_show = divclk[15];
 
 endmodule

@@ -7,8 +7,8 @@ module NPC
 	output wire [31:0] NextPC,			// 下一条指令地址
 	output wire [15:0] unconditional,	// 无条件分支指令计数
 	output wire [15:0] conditional,		// 有条件分支指令计数
-	output wire [15:0] conditionalsucces	// 有条件分支成功跳转计数
-	output wire halt;
+	output wire [15:0] conditionalsucces,	// 有条件分支成功跳转计数
+	output wire halt
 );
 
 wire [5:0] func, operate;
