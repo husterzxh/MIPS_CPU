@@ -26,6 +26,6 @@ module IM(
     );
     reg[32:1] im_mem[1024:1];
     
-    initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/IM.hex", im_mem);
+    initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/benchmark.hex", im_mem);
     assign im_now = im_mem[address[12:3]];
 endmodule

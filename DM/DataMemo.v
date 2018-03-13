@@ -50,20 +50,20 @@ module DataMemo(
                         end
                         2'b01: begin
                             mem1[addr[12:3]] = 0;
+                            mem2[addr[12:3]] = Din[8:1];
                             mem3[addr[12:3]] = 0;
                             mem4[addr[12:3]] = 0;
-                            mem2[addr[12:3]] = Din[8:1];
                         end
                         2'b10: begin
-                            mem3[addr[12:3]] = Din[8:1];
-                            mem2[addr[12:3]] = 0;
                             mem1[addr[12:3]] = 0;
+                            mem2[addr[12:3]] = 0;
+                            mem3[addr[12:3]] = Din[8:1];
                             mem4[addr[12:3]] = 0;
                         end
                         2'b11: begin
+                            mem1[addr[12:3]] = 0;
                             mem2[addr[12:3]] = 0;
                             mem3[addr[12:3]] = 0;
-                            mem1[addr[12:3]] = 0;
                             mem4[addr[12:3]] = Din[8:1];
                         end
                      endcase                
