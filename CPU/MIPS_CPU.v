@@ -139,7 +139,7 @@ module mips_cpu(
 	//显示模块
 	DataMemo rm(.addr({6'b0, ShiftB, 2'b0}), .Din(0), .WE(0), .clk(clk_run), .mode(2'b0), .DataOut(DataMemory));
 	show_signal my_show(.clk(clk_show), .ShiftA(ShiftA), .ShiftB(ShiftB), .total_cycle(0), .unconditional(uncon), .conditional(con), .conditionalsucces(consuccess),
-		.SyscallOut(0), .DataMemory(DataMemory), .PC(pc), .AN(an), .CA(CA), .CB(CB), .CC(CC), .CD(CD), .CE(CE), .CF(CF), .CG(CG), .DP(DP));
+		.SyscallOut(32'hff00ff00), .DataMemory(DataMemory), .PC(pc), .AN(an), .CA(CA), .CB(CB), .CC(CC), .CD(CD), .CE(CE), .CF(CF), .CG(CG), .DP(DP));
 
 	assign clk_run = (change_hz)? divclk[0] : divclk[20];
 	assign clk_show = divclk[15];
