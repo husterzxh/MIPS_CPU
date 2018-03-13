@@ -26,11 +26,7 @@ module IM(
     );
     reg[32:1] im_mem[1024:1];
     
-<<<<<<< HEAD
-    initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/benchmark.hex", im_mem);
-=======
-    // initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/IM.hex", im_mem);
-    im_mem[0] = 08000c05
+  	im_mem[0] = 08000c05
 	im_mem[1] = 20110001
 	im_mem[2] = 20120002
 	im_mem[3] = 20130003
@@ -248,6 +244,5 @@ module IM(
 	im_mem[215] = 20020022
 	im_mem[216] = 0000000c
 	im_mem[217] = 03e00008
->>>>>>> upstream/master
     assign im_now = im_mem[address[12:3]];
 endmodule
