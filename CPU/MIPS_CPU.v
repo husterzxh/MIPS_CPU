@@ -2,11 +2,12 @@
 
 module mips_cpu();
 	input clk,	//clock
-	input ,		//显示模式按钮
-	input ,		//内存地址按钮
+	input [1:0] ShiftA,	//显示模式按钮
+	input [3:0] ShiftB,		//内存地址按钮
 	input rst, //reset信号
-	input change_hz, //频率切换开关
-	output [7:0] seg, an;	 //seg控制数码管显示数字，an控制八个数码管的亮灭
+	input change_hz, //频率切换按钮
+	output [7:0] an;	 //an控制八个数码管的亮灭
+	output CA, CB, CC, CD, CE, CF, CG, DP,
 	output [3:0] dmaddr_light, //内存地址选择指示灯
 
 	wire [31:0] divclk;		//分频
@@ -19,7 +20,7 @@ module mips_cpu();
 	//NPC参数
 	wire [15:0] uncon;
 	wire [15:0] con;
-	wire [15:0] consucess;
+	wire [15:0] consuccess;
 	
 	//IM指令分解
 	wire [5:0] func;
@@ -74,6 +75,10 @@ module mips_cpu();
 	wire [31:0] Imm5to32;
 	wire [31:0] Imm16to32;
 
+	//显示模块
+	wire [31:0] DataMemory;
+	reg  clk_show;
+
 	assign Imm16 = {func, Imm6_10, Imm11_15};
 	assign Imm5 = Imm6_10;
 	//时钟
@@ -84,7 +89,7 @@ module mips_cpu();
 	
 	//NPC部分
 	NPC npc(.rst(rst), .clk(clk_run), .IM(im_now), .OFFSET(ext_32), .PC(pc), .RegRT(a_t), .RegRS(b_t),
-		.NextPC(nextpc), .unconditional(uncon), .conditional(con), .conditionalsucces(consucces));
+		.NextPC(nextpc), .unconditional(uncon), .conditional(con), .conditionalsucces(consuccess));
 	
 	//OFFSET选择部分
 	Zero_Ext_5to32 _5to32(.data_5bit(Imm5), .data_32bit(Imm5to32));
@@ -130,6 +135,12 @@ module mips_cpu();
 	assign mode[0] = (~lw) & (~sw);
 	assign mode[1] = 0;
 	DataMemo dm(.addr(addr), .din(din), .WE(we), .clk(clk_run), .mode(mode), .DataOut(dataout));
+
+	//显示模块
+	DataMemo rm(.addr({6'b0, ShiftB, 2'b0}), .din(0), .WE(0), .clk(clk_run), .mode(2'b0), .DataOut(DataMemory));
+	show_signal my_show(.clk(clk_show), .ShiftA(ShiftA), .ShiftB(ShiftB), .total_cycle(0), .unconditional(uncon), .conditional(con), .conditionalsucces(consuccess),
+		.SyscallOut(0), .DataMemory(DataMemory), .PC(pc), .AN(an), .CA(CA), .CB(CB), .CC(CC), .CD(CD), .CE(CE), .CF(CF), .CG(CG), .DP(DP));
+
 	
 
 	initial begin
@@ -137,6 +148,10 @@ module mips_cpu();
 			clk_run = divclk[0];
 		else
 			clk_run = divclk[20];
+	end
+
+	initial begin
+		clk_show = divclk[15];
 	end
 
 
