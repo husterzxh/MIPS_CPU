@@ -24,9 +24,10 @@ module IM(
     input [12:1] address,
     output [32:1] im_now
     );
-    reg[32:1] im_mem[1024:1];
+    reg[32:1] im_mem[1023:0];
     
-
+    initial
+    begin
     im_mem[0] = 32'h08000c05;
 	im_mem[1] = 32'h20110001;
 	im_mem[2] = 32'h20120002;
@@ -245,6 +246,7 @@ module IM(
 	im_mem[215] = 32'h20020022;
 	im_mem[216] = 32'h0000000c;
 	im_mem[217] = 32'h03e00008;
+	end
 	
     assign im_now = im_mem[address[12:3]];
 endmodule
