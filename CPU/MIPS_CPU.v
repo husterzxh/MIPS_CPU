@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module mips_cpu();
+module mips_cpu(
 	input clk,	//clock
 	input [1:0] ShiftA,	//显示模式按钮
 	input [3:0] ShiftB,		//内存地址按钮
@@ -9,7 +9,7 @@ module mips_cpu();
 	output [7:0] an;	 //an控制八个数码管的亮灭
 	output CA, CB, CC, CD, CE, CF, CG, DP,
 	output [3:0] dmaddr_light, //内存地址选择指示灯
-
+	);
 	wire [31:0] divclk;		//分频
 	reg [31:0] nextpc;		//下一个PC值
 	reg clk_run;
@@ -42,11 +42,11 @@ module mips_cpu();
 	wire sw;
 
 	//REGFILE参数          
-	reg we_t;           
-	reg [31:0]w_t;
-	reg [4:0]rw_t;      
-	reg [4:0]ra_t;      
-	reg [4:0]rb_t;      
+	wire we_t;           
+	wire [31:0]w_t;
+	wire [4:0]rw_t;      
+	wire [4:0]ra_t;      
+	wire [4:0]rb_t;      
 	wire [31:0]a_t;      
 	wire [31:0]b_t; 
 	wire [1:0] w_t_sel;
@@ -95,7 +95,7 @@ module mips_cpu();
 	Zero_Ext_5to32 _5to32(.data_5bit(Imm5), .data_32bit(Imm5to32));
 	Sign_Ext_16to32 _16to32(.data_16bit(Imm16), .data_32bit(Imm16to32));
 	
-	sel_bits_1_mux #(32) 5Extlmm(.d0(Imm16to32), .d1(Imm5to32), .sel(ext_5), .out(ext_32));
+	sel_bits_1_mux #(32) _5Extlmm(.d0(Imm16to32), .d1(Imm5to32), .sel(ext_5), .out(ext_32));
 
 	//regfile
 	assign w_t_sel[0] = lw;
@@ -110,10 +110,10 @@ module mips_cpu();
 	parameter v0_reg = 5'h02;
 	parameter display_reg = 5'h04;
 	sel_bits_1_mux #(5) sel_ra_t(.d0(Rs), .d1(v0_reg), .sel(syscall), .out(ra_t));
-	sel_bits_1_mux #(5) sel_ra_t(.d0(Rt), .d1(display_reg), .sel(syscall), .out(rb_t));
+	sel_bits_1_mux #(5) sel_rb_t(.d0(Rt), .d1(display_reg), .sel(syscall), .out(rb_t));
 	
-	RegisterFile_tb rgfile(.clk_t(clk_run), .we_t(we_t), .w_t(w_t), .rw_t(rw_t), .ra_t(ra_t), .rb_t(rb_t),
-		.a_t(a_t), .b_t(b_t));
+	RegisterFile rgfile(.clk(clk_run), .we(we_t), .w(w_t), .rw(rw_t), .ra(ra_t), .rb(rb_t),
+		.a(a_t), .b(b_t));
 	
 	//controler
 	controler control(.func(func), .operator(operator), .aluop(aluop), .ext_16(ext_16), .ext_s(ext_s),
