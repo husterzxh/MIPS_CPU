@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2018/03/12 15:38:15
+// Create Date: 2018/03/13 08:58:29
 // Design Name: 
-// Module Name: IM
+// Module Name: DVM
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,12 +20,19 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module IM(
-    input [12:1] address,
-    output [32:1] im_now
+module DVM(
+    input clk,
+    output [32:1] myclk
     );
-    reg[32:1] im_mem[1024:1];
-    
-    initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/IM.hex", im_mem);
-    assign im_now = im_mem[address[12:3]];
+    reg [32:1] myclk;
+    initial myclk = 0;
+    always@(posedge clk)
+    begin
+    	myclk  = myclk + 1;
+    end
+    // myclk[0] 50MHZ
+    // myclk[1] 25MHZ
+    //...
+    // myclk[19] 190HZ
+    // myclk[20] 95HZ
 endmodule

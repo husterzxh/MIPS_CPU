@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2018/03/12 15:38:15
+// Create Date: 2018/03/12 17:24:24
 // Design Name: 
-// Module Name: IM
+// Module Name: IM_test
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,12 +20,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module IM(
-    input [12:1] address,
-    output [32:1] im_now
+module IM_test(
+
     );
-    reg[32:1] im_mem[1024:1];
+    reg [12:1] addr;
+    wire [32:1] im_now;
+    reg clk;
     
-    initial $readmemh("C:/Users/123/Desktop/组原课程设计/IPSCPU/IM.hex", im_mem);
-    assign im_now = im_mem[address[12:3]];
+    IM t1(addr, im_now);
+    initial begin
+        addr = 0;
+    end
+    initial begin
+       clk = 0;
+       forever
+         #3 clk = ~clk;
+    end
+    always @(posedge clk)
+        begin
+            addr = addr+4;
+        end
+    
 endmodule
