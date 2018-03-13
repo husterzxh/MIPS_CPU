@@ -8,6 +8,7 @@ module NPC
 	output wire [15:0] unconditional,	// 无条件分支指令计数
 	output wire [15:0] conditional,		// 有条件分支指令计数
 	output wire [15:0] conditionalsucces	// 有条件分支成功跳转计数
+	output wire halt;
 );
 
 wire [5:0] func, operate;
@@ -16,7 +17,6 @@ wire J, JAL, JR, BNE, BEQ;
 wire syscall;
 wire [31:0] NextPC0, NextPC1, NextPC2, NextPC21, NextPC22;
 wire [1:0] PC_sel;
-wire halt;
 
 assign func[5:0] = IM[5:0];
 assign operate[5:0] = IM[31:26];
