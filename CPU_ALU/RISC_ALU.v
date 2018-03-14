@@ -20,8 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module RISC_ALU( clock, X, Y, ALU_OP, Result, Result2, OF, UOF, Equal);
-input clock;
+module RISC_ALU( X, Y, ALU_OP, Result, Result2, OF, UOF, Equal);
 input  [31:0] X;
 input  [31:0] Y;
 input  [ 3:0] ALU_OP; 
@@ -38,7 +37,7 @@ reg [63:0]para1, para2;
 reg [15:0]X0, Y0, X1, Y1, S0, S1;
 reg p1, p2;
 reg C;
-always @(posedge clock)
+always @(*)
 begin
     OF = 0;
     UOF = 0;
