@@ -79,7 +79,7 @@ module mips_cpu(
 	wire [31:0] DataMemory;
 	wire  clk_show;
 
-	assign Imm16 = {func, Imm6_10, Imm11_15};
+	assign Imm16 = im_now[15:0];
 	assign Imm5 = Imm6_10;
 	//时钟
 	DVM dvm(.clk(clk), .myclk(divclk));
